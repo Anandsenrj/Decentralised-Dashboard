@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DeFi Decentralization Dashboard — CDI Framework</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23378ADD'/><text x='16' y='22' text-anchor='middle' font-size='18' fill='white'>⬡</text></svg>"/>
+</head>
+<body>
+  <div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">⬡</div>
+        <div>
+          <div class="logo-title">CDI Monitor</div>
+          <div class="logo-sub">Web3 Analytics</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a class="nav-item active" href="#overview">
+          <span class="nav-icon">◈</span> Overview
+        </a>
+        <a class="nav-item" href="#protocols">
+          <span class="nav-icon">◉</span> Protocols
+        </a>
+        <a class="nav-item" href="#prices">
+          <span class="nav-icon">◎</span> Prices
+        </a>
+        <a class="nav-item" href="#paradox">
+          <span class="nav-icon">⊕</span> Paradox
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="live-badge">
+          <span class="pulse"></span>
+          <span>Live Feed</span>
+        </div>
+        <div class="countdown-wrap">
+          <div class="countdown-label">Next refresh</div>
+          <div class="countdown-ring">
+            <svg viewBox="0 0 36 36" class="ring-svg">
+              <circle cx="18" cy="18" r="14" fill="none" stroke="#2a2a3a" stroke-width="3"/>
+              <circle id="ring-circle" cx="18" cy="18" r="14" fill="none"
+                stroke="#378ADD" stroke-width="3"
+                stroke-dasharray="87.96 87.96"
+                stroke-dashoffset="0"
+                stroke-linecap="round"
+                transform="rotate(-90 18 18)"/>
+            </svg>
+            <span id="countdown-num">30</span>
+          </div>
+        </div>
+        <div class="last-updated">Updated: <span id="last-update-time">—</span></div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+
+      <!-- Header -->
+      <header class="top-bar">
+        <div>
+          <h1 class="page-title">Decentralization Intelligence Dashboard</h1>
+          <p class="page-sub">Composite Decentralization Index (CDI) · Q1 2024 On-chain Data · 5 DeFi Protocols</p>
+        </div>
+        <div class="header-actions">
+          <select id="refresh-interval" class="select-ctrl" onchange="setRefreshInterval(this.value)">
+            <option value="15">Refresh: 15s</option>
+            <option value="30" selected>Refresh: 30s</option>
+            <option value="60">Refresh: 60s</option>
+          </select>
+          <button class="btn-refresh" onclick="fullRefresh()">↻ Refresh Now</button>
+        </div>
+      </header>
+
+      <!-- Metric cards -->
+      <section id="overview" class="section">
+        <div class="metrics-row">
+          <div class="metric-card" style="--accent:#378ADD">
+            <div class="mc-label">Avg CDI Score</div>
+            <div class="mc-value" id="avg-cdi">—</div>
+            <div class="mc-badge" id="cdi-interp">—</div>
+            <div class="mc-bar"><div class="mc-bar-fill" id="cdi-fill" style="background:#378ADD"></div></div>
+          </div>
+          <div class="metric-card" style="--accent:#E24B4A">
+            <div class="mc-label">Avg Gini Coefficient</div>
+            <div class="mc-value" id="avg-gini">—</div>
+            <div class="mc-badge danger">Ownership Concentration</div>
+            <div class="mc-bar"><div class="mc-bar-fill" id="gini-fill" style="background:#E24B4A"></div></div>
+          </div>
+          <div class="metric-card" style="--accent:#1D9E75">
+            <div class="mc-label">Avg Entropy</div>
+            <div class="mc-value" id="avg-entropy">—</div>
+            <div class="mc-badge success">Distributed Usage</div>
+            <div class="mc-bar"><div class="mc-bar-fill" id="entropy-fill" style="background:#1D9E75"></div></div>
+          </div>
+          <div class="metric-card" style="--accent:#EF9F27">
+            <div class="mc-label">Avg HHI</div>
+            <div class="mc-value" id="avg-hhi">—</div>
+            <div class="mc-badge warning">Governance Conc.</div>
+            <div class="mc-bar"><div class="mc-bar-fill" id="hhi-fill" style="background:#EF9F27"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CDI Time Series -->
+      <section class="section card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">CDI(t) — Time Evolution</div>
+            <div class="card-sub">Rolling 90-day decentralization index per protocol</div>
+          </div>
+          <div class="proto-toggles" id="proto-btns"></div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="cdiChart" role="img" aria-label="CDI time series for 5 DeFi protocols over 90 days">
+            CDI time evolution for Uniswap, Aave, SushiSwap, Curve, and Compound.
+          </canvas>
+        </div>
+        <div class="chart-legend" id="chart-legend"></div>
+      </section>
+
+      <!-- Protocol table + Prices -->
+      <section class="section grid2">
+
+        <div id="protocols" class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Protocol Rankings</div>
+              <div class="card-sub">Sorted by CDI score</div>
+            </div>
+          </div>
+          <table class="proto-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Protocol</th>
+                <th>CDI</th>
+                <th>Gini</th>
+                <th>Entropy</th>
+                <th>Risk</th>
+              </tr>
+            </thead>
+            <tbody id="proto-rows"></tbody>
+          </table>
+        </div>
+
+        <div id="prices" class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Live Token Prices</div>
+              <div class="card-sub">Updates every 3 seconds</div>
+            </div>
+          </div>
+          <div id="price-list"></div>
+        </div>
+
+      </section>
+
+      <!-- Paradox + Entropy bars -->
+      <section id="paradox" class="section grid2">
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Decentralization Paradox</div>
+              <div class="card-sub">Operational vs Governance gap</div>
+            </div>
+            <span class="info-badge" title="High operational entropy but low governance decentralization reveals the paradox.">ℹ</span>
+          </div>
+          <div id="paradox-list"></div>
+          <div class="paradox-legend">
+            <span class="pl-dot" style="background:#378ADD"></span> Operational &nbsp;
+            <span class="pl-dot" style="background:#E24B4A"></span> Governance
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Dimension Breakdown</div>
+          <div class="card-sub" style="margin-bottom:12px">Normalized component scores per protocol</div>
+          <div class="chart-wrap" style="height:220px">
+            <canvas id="radarChart" role="img" aria-label="Radar chart of CDI dimensions per protocol">
+              Radar chart showing Gini, HHI, and Entropy normalized scores per protocol.
+            </canvas>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Footer -->
+      <footer class="dash-footer">
+        CDI Framework · Pranveer Singh Institute of Technology, Kanpur ·
+        Data: Etherscan + Dune Analytics · Q1 2024
+      </footer>
+
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
