@@ -2,19 +2,6 @@
 
 A real-time, interactive dashboard for monitoring the **Composite Decentralization Index (CDI)** across major DeFi protocols — built as part of the research paper *"A Composite Index Framework for Quantifying Decentralization in Web3 Systems"*.
 
----
-
-## Features
-
-- **Live CDI(t) time series** — 90-day rolling chart for Uniswap v3, Aave v3, SushiSwap, Curve, Compound
-- **Token price monitor** — UNI, AAVE, SUSHI, CRV, COMP with sparkline graphs (updates every 3s)
-- **Protocol rankings** — dynamic table sorted by CDI score with risk classification
-- **Decentralization Paradox visualizer** — operational vs governance gap per protocol
-- **Radar chart** — normalized Gini / HHI / Entropy breakdown
-- **Auto-refresh** — configurable 15s / 30s / 60s refresh cycle with countdown ring
-- **REST API** — `/api/protocols` and `/api/prices` endpoints for integration
-
----
 
 ## ✨ Key Features
 
@@ -24,6 +11,9 @@ A real-time, interactive dashboard for monitoring the **Composite Decentralizati
 - **Protocol Rankings** — Dynamic, sortable table with current CDI scores and **risk classification** (Highly Centralized / Moderately Decentralized / Highly Decentralized)
 - **Decentralization Paradox Visualizer** — Highlights the gap between **operational decentralization** and **governance decentralization** for each protocol
 - **Radar Chart** — Multi-dimensional breakdown using normalized **Gini Coefficient**, **Herfindahl-Hirschman Index (HHI)**, and **Entropy** metrics
+- **Auto-refresh** — configurable 15s / 30s / 60s refresh cycle with countdown ring
+- **REST API** — `/api/protocols` and `/api/prices` endpoints for integration
+
 
 ### User Experience
 - **Auto-refresh** with configurable intervals (15s / 30s / 60s) and visual countdown ring
