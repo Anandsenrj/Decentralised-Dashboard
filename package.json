@@ -1,0 +1,22 @@
+{
+  "name": "defi-decentralization-dashboard",
+  "version": "1.0.0",
+  "description": "Composite Decentralization Index (CDI) Dashboard for DeFi Protocols — Web3 Analytics",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "keywords": ["blockchain", "defi", "decentralization", "web3", "dashboard", "CDI"],
+  "author": "Pranveer Singh Institute of Technology",
+  "license": "MIT"
+}
